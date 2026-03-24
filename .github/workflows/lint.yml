@@ -1,0 +1,24 @@
+name: 'Vercel - ap-graceful-journey-education: lint'
+
+on:
+  repository_dispatch:
+    types:
+      - vercel
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      statuses: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: 'lint PHP files'
+        run: find . -name "*.php" -not -path "./.git/*" -exec php -l {} \;
+
+      - name: 'notify vercel'
+        if: always()
+        uses: 'vercel/repository-dispatch/actions/status@v1'
+        with:
+          name: 'Vercel - ap-graceful-journey-education: lint'
